@@ -63,3 +63,21 @@ db.employees.getIndexes();
 db.employees.createIndex({ department: 1 });
 
 db.employees.getIndexes();
+
+db.employees.aggregate([
+  { $group: { _id: "$department", totalEmployees: { $sum: 1 } } },
+  { $sort: { _id: 1 } }
+]);
+
+db.employees.aggregate([
+  { $group: { _id: "$department", averageExperience: { $avg: "$experience" } } },
+  { $sort: { _id: 1 } }
+]);
+
+db.employees.aggregate([
+  { $match: { department: "Engineering" } },
+  { $sort: { experience: -1 } },
+  { $limit: 2 },
+  { $project: { _id: 0, name: 1, experience: 1 } }
+]);
+

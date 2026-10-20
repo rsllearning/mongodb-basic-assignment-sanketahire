@@ -601,3 +601,70 @@ db.employees.getIndexes();
 #### Visual Execution Proof:
 * **Single-Field Department Index Verification:**  
   ![Task 5 Indexing Verification](screenshots/05_indexing_verification.png)
+
+---
+
+### Task 6: Aggregation Pipelines
+
+#### Step 1: Count Employees in Each Department
+Group documents by the `department` field and calculate the total employee count per department using `$group` with `$sum: 1`, sorted alphabetically by department name (`{ _id: 1 }`).
+
+⚡ **Input Command:**
+```javascript
+db.employees.aggregate([
+  { $group: { _id: "$department", totalEmployees: { $sum: 1 } } },
+  { $sort: { _id: 1 } }
+]);
+```
+🖥️ **Terminal Output:**
+```json
+[
+  { "_id": "Engineering", "totalEmployees": 3 },
+  { "_id": "Finance", "totalEmployees": 1 },
+  { "_id": "HR", "totalEmployees": 1 }
+]
+```
+
+#### Step 2: Calculate Average Experience per Department
+Calculate the average experience of employees in each department using `$group` with `$avg: "$experience"`, sorted alphabetically by department name (`{ _id: 1 }`).
+
+⚡ **Input Command:**
+```javascript
+db.employees.aggregate([
+  { $group: { _id: "$department", averageExperience: { $avg: "$experience" } } },
+  { $sort: { _id: 1 } }
+]);
+```
+🖥️ **Terminal Output:**
+```json
+[
+  { "_id": "Engineering", "averageExperience": 5 },
+  { "_id": "Finance", "averageExperience": 2 },
+  { "_id": "HR", "averageExperience": 4 }
+]
+```
+
+#### Step 3: Top 2 Highest-Experience Employees in Engineering
+Find the top 2 employees with the highest experience in the `Engineering` department by chaining `$match` (filter `department: "Engineering"`), `$sort` (descending experience `{ experience: -1 }`), `$limit` (`2`), and `$project` (`_id: 0, name: 1, experience: 1`).
+
+⚡ **Input Command:**
+```javascript
+db.employees.aggregate([
+  { $match: { department: "Engineering" } },
+  { $sort: { experience: -1 } },
+  { $limit: 2 },
+  { $project: { _id: 0, name: 1, experience: 1 } }
+]);
+```
+🖥️ **Terminal Output:**
+```json
+[
+  { "name": "David", "experience": 6 },
+  { "name": "Robert", "experience": 5 }
+]
+```
+
+#### Visual Execution Proof:
+* **Aggregation Pipelines (Group Count, Average Experience, Top Engineers):**  
+  ![Task 6 Aggregation Pipelines](screenshots/06_aggregation_pipelines.png)
+
