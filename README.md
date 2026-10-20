@@ -668,3 +668,132 @@ db.employees.aggregate([
 * **Aggregation Pipelines (Group Count, Average Experience, Top Engineers):**  
   ![Task 6 Aggregation Pipelines](screenshots/06_aggregation_pipelines.png)
 
+---
+
+### Task 7: MongoDB Fundamentals — Assessment Answers
+
+The answers for the 10 assessment MCQs are recorded in [`answers.md`](answers.md):
+
+| Question | Topic / Concept | Selected Answer | Technical Justification |
+| :---: | :--- | :---: | :--- |
+| **Q1** | Data Storage Model | **B** | MongoDB is a document-oriented database that stores records as flexible, self-describing BSON documents organized within collections. |
+| **Q2** | Document Identification | **C** | MongoDB automatically assigns and uniquely indexes the `_id` field (defaulting to an `ObjectId`) as each document's primary key. |
+| **Q3** | CRUD Update Operations | **C** | The `{ upsert: true }` option updates an existing matching document or inserts a new document if no match is found. |
+| **Q4** | Array Update Modifiers | **C** | The `$addToSet` operator appends a value to an array only if it does not already exist, guaranteeing idempotent array modifications. |
+| **Q5** | Aggregation Pipeline | **B** | The `$group` stage partitions input documents by a specified identifier expression and applies accumulators (`$sum`, `$avg`, etc.). |
+| **Q6** | Nested Document Queries | **C** | Quoted dot notation (`"address.city"`) is required to traverse and query embedded document attributes in MongoDB. |
+| **Q7** | Data Modeling Strategies | **B** | Embedding (denormalization) stores related sub-documents or arrays directly within parent documents for atomic, single-query retrieval. |
+| **Q8** | Document Deletion | **C** | An empty filter `{}` in `deleteMany({})` deletes all documents from the collection while preserving collection metadata and indexes. |
+| **Q9** | Database Security & Credentials | **C** | Credentials should never be hard-coded or committed to version control; they must be stored in environment variables or secrets vaults. |
+| **Q10** | Indexing Architecture | **B** | MongoDB automatically indexes only the primary key `_id` by default; all secondary indexes must be explicitly defined. |
+
+
+#### Detailed Question Breakdown & Technical Explanations
+
+##### Q1. MongoDB primarily stores application data as:
+* A. Rows
+* **B. Documents**
+* C. Worksheets
+* D. Files
+
+**Selected Answer:** **B (Documents)**  
+**Technical Explanation:** MongoDB is a document-oriented NoSQL database system. It stores application records as flexible, self-describing BSON (Binary JSON) documents organized within collections, rather than rows in tabular schemas (RDBMS) or worksheets (spreadsheets).
+
+---
+
+##### Q2. Which field is automatically added and indexed by MongoDB to uniquely identify a document?
+* A. `id`
+* B. `key`
+* **C. `_id`**
+* D. `primaryKey`
+
+**Selected Answer:** **C (`_id`)**  
+**Technical Explanation:** Every MongoDB document requires a unique primary key stored in the `_id` field. If omitted during insertion, the driver or server automatically generates a 12-byte `ObjectId` and creates an immutable unique index on `_id` by default.
+
+---
+
+##### Q3. Which option makes `updateOne()` insert a document when no matching document exists?
+* A. `{ insert: true }`
+* B. `{ create: true }`
+* **C. `{ upsert: true }`**
+* D. `{ replace: true }`
+
+**Selected Answer:** **C (`{ upsert: true }`)**  
+**Technical Explanation:** In update operations (`updateOne`, `updateMany`), setting `{ upsert: true }` enables atomic update-or-insert behavior. If a document matches the query criteria, it is updated; if no match exists, MongoDB inserts a new document created from the query filter and update operators.
+
+---
+
+##### Q4. Which operator adds a value to an array only if the value is not already present?
+* A. `$push`
+* B. `$set`
+* **C. `$addToSet`**
+* D. `$inc`
+
+**Selected Answer:** **C (`$addToSet`)**  
+**Technical Explanation:** The `$addToSet` operator treats target arrays as mathematical sets, ensuring idempotency by appending an element only if it does not already exist. In contrast, `$push` unconditionally appends values, allowing duplicates.
+
+---
+
+##### Q5. Which aggregation stage is used to group documents?
+* A. `$match`
+* **B. `$group`**
+* C. `$project`
+* D. `$sort`
+
+**Selected Answer:** **B (`$group`)**  
+**Technical Explanation:** The `$group` pipeline stage separates input documents into groups according to a specified `_id` expression and applies accumulator expressions (such as `$sum`, `$avg`, `$min`, `$max`) to compute aggregated metrics over each group.
+
+---
+
+##### Q6. Which query correctly searches for employees whose address city is Pune?
+* A. `{ address: "Pune" }`
+* B. `{ city: "Pune" }`
+* **C. `{ "address.city": "Pune" }`**
+* D. `{ address.city: "Pune" }`
+
+**Selected Answer:** **C (`{ "address.city": "Pune" }`)**  
+**Technical Explanation:** MongoDB uses dot notation to query nested fields within embedded documents. When using dot notation, the path must be enclosed in quotes (`"address.city"`). Without quotes, JavaScript syntax interprets the period as an unquoted property access, causing a syntax error.
+
+---
+
+##### Q7. Which approach stores related data directly inside the parent MongoDB document?
+* A. Referencing
+* **B. Embedding**
+* C. Indexing
+* D. Aggregation
+
+**Selected Answer:** **B (Embedding)**  
+**Technical Explanation:** Embedding (denormalization) stores related sub-documents or arrays directly within the parent document. This approach optimizes read performance and atomicity by enabling single-query document retrieval without needing relational joins or multi-document lookups.
+
+---
+
+##### Q8. What does the following command do? `db.employees.deleteMany({})`
+* A. Deletes no documents
+* B. Deletes only one document
+* **C. Deletes all documents in the collection**
+* D. Deletes the collection itself
+
+**Selected Answer:** **C (Deletes all documents in the collection)**  
+**Technical Explanation:** Passing an empty filter `{}` to `deleteMany()` matches every document in the collection, removing all records. However, unlike `drop()`, the collection itself, along with its metadata and defined indexes, remains intact in the database.
+
+---
+
+##### Q9. Which is the recommended approach for application database credentials?
+* A. Hard-code them in application source code
+* B. Commit them to Git
+* **C. Store them using secure configuration/environment variables or secrets management**
+* D. Add them to comments in the source code
+
+**Selected Answer:** **C (Store them using secure configuration/environment variables or secrets management)**  
+**Technical Explanation:** Hard-coding or committing credentials to version control poses a critical security risk. Industry standard best practice requires managing database credentials through environment variables (`.env`), container secrets, or dedicated secrets management vaults (e.g., HashiCorp Vault, AWS Secrets Manager, GCP Secret Manager).
+
+---
+
+##### Q10. Which statement about MongoDB indexes is correct?
+* A. Every field is automatically indexed.
+* **B. Only `_id` is automatically indexed by default.**
+* C. Indexes should always be created in every field.
+* D. Indexes only work with aggregation queries.
+
+**Selected Answer:** **B (Only `_id` is automatically indexed by default.)**  
+**Technical Explanation:** MongoDB only automatically creates a unique index on the primary `_id` field upon collection creation. All secondary indexes must be explicitly created based on query patterns. Indexing every field would introduce severe write performance overhead and memory consumption.
