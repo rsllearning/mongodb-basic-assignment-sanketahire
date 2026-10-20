@@ -535,7 +535,69 @@ db.employees.countDocuments();
 * **Canary Document Insertion, Deletion & Integrity Check:**  
   ![Task 4 Canary Delete](screenshots/04_canary_delete.png)
 
+---
 
+### Task 5: Indexing Strategy
 
+#### Step 1: Baseline Index Inspection
+Inspect existing indexes on the `employees` collection prior to creating custom indexes (default `_id_` index created by MongoDB).
 
+⚡ **Input Command:**
+```javascript
+db.employees.getIndexes();
+```
+🖥️ **Terminal Output:**
+```json
+[
+  {
+    "v": 2,
+    "key": {
+      "_id": 1
+    },
+    "name": "_id_"
+  }
+]
+```
 
+#### Step 2: Create Ascending Index on `department`
+Create a single-field index on the `department` field in ascending order (`1`) to optimize department-based filtering and grouping.
+
+⚡ **Input Command:**
+```javascript
+db.employees.createIndex({ department: 1 });
+```
+🖥️ **Terminal Output:**
+```text
+department_1
+```
+
+#### Step 3: Verification of Created Index
+Assert that `getIndexes()` now returns both the default primary key index `_id_` and the newly created `department_1` index.
+
+⚡ **Input Command:**
+```javascript
+db.employees.getIndexes();
+```
+🖥️ **Terminal Output:**
+```json
+[
+  {
+    "v": 2,
+    "key": {
+      "_id": 1
+    },
+    "name": "_id_"
+  },
+  {
+    "v": 2,
+    "key": {
+      "department": 1
+    },
+    "name": "department_1"
+  }
+]
+```
+
+#### Visual Execution Proof:
+* **Single-Field Department Index Verification:**  
+  ![Task 5 Indexing Verification](screenshots/05_indexing_verification.png)

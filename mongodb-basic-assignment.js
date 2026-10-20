@@ -57,3 +57,9 @@ db.employees.deleteOne({ _id: "EMP999" });
 db.employees.findOne({ _id: "EMP999" });
 
 db.employees.countDocuments();
+
+db.employees.getIndexes();
+
+db.employees.createIndex({ department: 1 });
+
+db.employees.getIndexes();
