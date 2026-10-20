@@ -33,6 +33,48 @@ mongodb-basic-assignment-sanketahire/
 ## Solution Delivery
 The full assignment solution, queries, outputs, and visual execution artifacts are implemented in the `feature/mongodb-basic-solution` branch and submitted via Pull Request.
 
+## How to Run the Solution Script
+
+You can execute the entire assignment script [`mongodb-basic-assignment.js`](mongodb-basic-assignment.js) directly against your local MongoDB instance using any of the following methods:
+
+### Method 1: Input Redirection via Terminal (Recommended)
+Because the script begins with `use company;`, redirecting the file directly into `mongosh` executes all tasks sequentially while echoing both the queries and formatted terminal outputs:
+
+```bash
+# Navigate to the repository directory
+cd /path/to/mongodb-basic-assignment-sanketahire
+
+# Execute via standard input redirection
+mongosh < mongodb-basic-assignment.js
+```
+
+### Method 2: Pass Script Directly to `mongosh`
+Run the script as an argument to `mongosh`:
+
+```bash
+# Execute against the company database
+mongosh company mongodb-basic-assignment.js
+```
+
+*Or with an explicit connection string:*
+```bash
+mongosh "mongodb://127.0.0.1:27017/company" mongodb-basic-assignment.js
+```
+
+### Method 3: Execute from within `mongosh` Shell
+If you already have an active `mongosh` session:
+
+```javascript
+// 1. Switch to the company database
+use company;
+
+// 2. Load and run the script file
+load("mongodb-basic-assignment.js");
+```
+
+### Method 4: Interactive Step-by-Step Execution
+Open the MongoDB Shell (`mongosh`) and execute the individual query blocks step-by-step as documented in the task-by-task sections below.
+
 ---
 
 ## Task-by-Task Implementation & Verification
