@@ -178,4 +178,105 @@ db.employees.find();
 * **Collection & Count Verification:**  
   ![Task 1 Collection Verification](screenshots/01b_collection_verification.png)
 
+---
+
+### Task 2: Read and Query Operations
+
+#### 2.1 Engineering Employees
+Retrieve employees whose department is Engineering. Return only `_id`, `name`, and `experience`, sorted by `name` in ascending order.
+
+⚡ **Input Command:**
+```javascript
+db.employees.find({ department: "Engineering" }, { _id: 1, name: 1, experience: 1 }).sort({ name: 1 });
+```
+🖥️ **Terminal Output:**
+```json
+[
+  { "_id": "EMP003", "name": "David", "experience": 6 },
+  { "_id": "EMP001", "name": "John", "experience": 4 },
+  { "_id": "EMP005", "name": "Robert", "experience": 5 }
+]
+```
+
+#### 2.2 Employees with 5 or More Years of Experience
+Retrieve employees whose experience is greater than or equal to 5. Return only `name` and `experience`, excluding `_id`, sorted by `experience` in descending order.
+
+⚡ **Input Command:**
+```javascript
+db.employees.find({ experience: { $gte: 5 } }, { _id: 0, name: 1, experience: 1 }).sort({ experience: -1 });
+```
+🖥️ **Terminal Output:**
+```json
+[
+  { "name": "David", "experience": 6 },
+  { "name": "Robert", "experience": 5 }
+]
+```
+
+#### 2.3 Nested Document Query (City: Pune)
+Retrieve employees whose address city is Pune. Return only employee name and city, sorted by `name` in ascending order.
+
+⚡ **Input Command:**
+```javascript
+db.employees.find({ "address.city": "Pune" }, { _id: 0, name: 1, "address.city": 1 }).sort({ name: 1 });
+```
+🖥️ **Terminal Output:**
+```json
+[
+  { "name": "Emma", "address": { "city": "Pune" } },
+  { "name": "John", "address": { "city": "Pune" } }
+]
+```
+
+#### 2.4 Array Query with `$in` (MongoDB or Spring Boot)
+Using `$in`, retrieve employees whose skills contain either MongoDB or Spring Boot, sorted by `name` in ascending order.
+
+⚡ **Input Command:**
+```javascript
+db.employees.find({ skills: { $in: ["MongoDB", "Spring Boot"] } }).sort({ name: 1 });
+```
+🖥️ **Terminal Output:**
+```json
+[
+  {
+    "_id": "EMP003",
+    "name": "David",
+    "department": "Engineering",
+    "experience": 6,
+    "skills": ["Java", "MongoDB"],
+    "active": true,
+    "address": { "city": "Bengaluru", "country": "India" }
+  },
+  {
+    "_id": "EMP001",
+    "name": "John",
+    "department": "Engineering",
+    "experience": 4,
+    "skills": ["Java", "Spring Boot"],
+    "active": true,
+    "address": { "city": "Pune", "country": "India" }
+  }
+]
+```
+
+#### 2.5 Sorting and Limiting (Top 2 Highest Experience)
+Retrieve the top 2 employees with the highest experience. Return only `name` and `experience`.
+
+⚡ **Input Command:**
+```javascript
+db.employees.find({}, { _id: 0, name: 1, experience: 1 }).sort({ experience: -1 }).limit(2);
+```
+🖥️ **Terminal Output:**
+```json
+[
+  { "name": "David", "experience": 6 },
+  { "name": "Robert", "experience": 5 }
+]
+```
+
+#### Visual Execution Proof:
+* **Query and Read Operations:**  
+  ![Task 2 Read Queries](screenshots/02_read_queries.png)
+
+
 
