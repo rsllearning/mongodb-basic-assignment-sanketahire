@@ -432,6 +432,110 @@ db.employees.findOne({ name: "Robert" });
 * **Idempotency Verification ($addToSet Second Execution):**  
   ![Task 3 Idempotency Verification](screenshots/03b_idempotency_verification.png)
 
+---
+
+### Task 4: Delete Operation
+
+#### Step 1: Baseline Count Verification
+Assert the starting collection document count prior to insertion.
+
+⚡ **Input Command:**
+```javascript
+db.employees.countDocuments();
+```
+🖥️ **Terminal Output:**
+```text
+5
+```
+
+#### Step 2: Insert Temporary Canary Document (`EMP999`)
+Insert a temporary employee record into the collection.
+
+⚡ **Input Command:**
+```javascript
+db.employees.insertOne({ _id: "EMP999", name: "Temporary Employee", department: "Training", experience: 0 });
+```
+🖥️ **Terminal Output:**
+```json
+{
+  "acknowledged": true,
+  "insertedId": "EMP999"
+}
+```
+
+#### Step 3: Verify Count After Insertion
+Assert that document count increased from 5 to 6.
+
+⚡ **Input Command:**
+```javascript
+db.employees.countDocuments();
+```
+🖥️ **Terminal Output:**
+```text
+6
+```
+
+#### Step 4: Verify Canary Document Exists
+Verify that `EMP999` is retrieved properly.
+
+⚡ **Input Command:**
+```javascript
+db.employees.findOne({ _id: "EMP999" });
+```
+🖥️ **Terminal Output:**
+```json
+{
+  "_id": "EMP999",
+  "name": "Temporary Employee",
+  "department": "Training",
+  "experience": 0
+}
+```
+
+#### Step 5: Delete Only the Canary Document
+Delete only the temporary record using `deleteOne()`.
+
+⚡ **Input Command:**
+```javascript
+db.employees.deleteOne({ _id: "EMP999" });
+```
+🖥️ **Terminal Output:**
+```json
+{
+  "acknowledged": true,
+  "deletedCount": 1
+}
+```
+
+#### Step 6: Verification of Targeted Deletion
+Assert that querying for `EMP999` returns `null`.
+
+⚡ **Input Command:**
+```javascript
+db.employees.findOne({ _id: "EMP999" });
+```
+🖥️ **Terminal Output:**
+```text
+null
+```
+
+#### Step 7: Collection Integrity Check
+Assert that the original 5 employee documents remain intact in the collection.
+
+⚡ **Input Command:**
+```javascript
+db.employees.countDocuments();
+```
+🖥️ **Terminal Output:**
+```text
+5
+```
+
+#### Visual Execution Proof:
+* **Canary Document Insertion, Deletion & Integrity Check:**  
+  ![Task 4 Canary Delete](screenshots/04_canary_delete.png)
+
+
 
 
 

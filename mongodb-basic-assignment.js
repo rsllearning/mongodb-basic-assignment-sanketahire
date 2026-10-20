@@ -43,3 +43,17 @@ db.employees.findOne({ name: "Robert" });
 db.employees.updateOne({ name: "Robert" }, { $addToSet: { skills: "MongoDB" } });
 
 db.employees.findOne({ name: "Robert" });
+
+db.employees.countDocuments();
+
+db.employees.insertOne({ _id: "EMP999", name: "Temporary Employee", department: "Training", experience: 0 });
+
+db.employees.countDocuments();
+
+db.employees.findOne({ _id: "EMP999" });
+
+db.employees.deleteOne({ _id: "EMP999" });
+
+db.employees.findOne({ _id: "EMP999" });
+
+db.employees.countDocuments();
