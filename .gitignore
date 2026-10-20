@@ -1,0 +1,18 @@
+# macOS System Files
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# MongoDB / mongosh log files
+*.log
+.mongosh/
+.mongosh_history
+
+# Node / Editor temp files
+node_modules/
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
