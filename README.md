@@ -278,5 +278,160 @@ db.employees.find({}, { _id: 0, name: 1, experience: 1 }).sort({ experience: -1 
 * **Query and Read Operations:**  
   ![Task 2 Read Queries](screenshots/02_read_queries.png)
 
+---
+
+### Task 3: Update Operations
+
+#### 3.1 Atomic Increment with `$inc` (Alice's Experience)
+Increase Alice's experience by 1 (advances from 3 to 4).
+
+⚡ **Input Command:**
+```javascript
+db.employees.updateOne({ name: "Alice" }, { $inc: { experience: 1 } });
+```
+🖥️ **Terminal Output:**
+```json
+{
+  "acknowledged": true,
+  "insertedId": null,
+  "matchedCount": 1,
+  "modifiedCount": 1,
+  "upsertedCount": 0
+}
+```
+
+**Verification:**
+⚡ **Input Command:**
+```javascript
+db.employees.findOne({ name: "Alice" });
+```
+🖥️ **Terminal Output:**
+```json
+{
+  "_id": "EMP002",
+  "name": "Alice",
+  "department": "HR",
+  "experience": 4,
+  "skills": ["Recruitment", "Communication"],
+  "active": true,
+  "address": { "city": "Mumbai", "country": "India" }
+}
+```
+
+#### 3.2 Field Update with `$set` (Emma's Active Status)
+Change Emma's active value from `false` to `true`.
+
+⚡ **Input Command:**
+```javascript
+db.employees.updateOne({ name: "Emma" }, { $set: { active: true } });
+```
+🖥️ **Terminal Output:**
+```json
+{
+  "acknowledged": true,
+  "insertedId": null,
+  "matchedCount": 1,
+  "modifiedCount": 1,
+  "upsertedCount": 0
+}
+```
+
+**Verification:**
+⚡ **Input Command:**
+```javascript
+db.employees.findOne({ name: "Emma" });
+```
+🖥️ **Terminal Output:**
+```json
+{
+  "_id": "EMP004",
+  "name": "Emma",
+  "department": "Finance",
+  "experience": 2,
+  "skills": ["Accounting", "Excel"],
+  "active": true,
+  "address": { "city": "Pune", "country": "India" }
+}
+```
+
+#### 3.3 Array Update with `$addToSet` (Robert's Skills)
+Add `"MongoDB"` to Robert's skills array using `$addToSet`.
+
+⚡ **Input Command:**
+```javascript
+db.employees.updateOne({ name: "Robert" }, { $addToSet: { skills: "MongoDB" } });
+```
+🖥️ **Terminal Output:**
+```json
+{
+  "acknowledged": true,
+  "insertedId": null,
+  "matchedCount": 1,
+  "modifiedCount": 1,
+  "upsertedCount": 0
+}
+```
+
+**Verification:**
+⚡ **Input Command:**
+```javascript
+db.employees.findOne({ name: "Robert" });
+```
+🖥️ **Terminal Output:**
+```json
+{
+  "_id": "EMP005",
+  "name": "Robert",
+  "department": "Engineering",
+  "experience": 5,
+  "skills": ["Java", "Docker", "MongoDB"],
+  "active": true,
+  "address": { "city": "Delhi", "country": "India" }
+}
+```
+
+#### 3.3 Idempotency Proof (Executing `$addToSet` a Second Time)
+Execute the exact same `$addToSet` operation again and verify that `"MongoDB"` is not duplicated (`modifiedCount: 0`).
+
+⚡ **Input Command:**
+```javascript
+db.employees.updateOne({ name: "Robert" }, { $addToSet: { skills: "MongoDB" } });
+```
+🖥️ **Terminal Output:**
+```json
+{
+  "acknowledged": true,
+  "insertedId": null,
+  "matchedCount": 1,
+  "modifiedCount": 0,
+  "upsertedCount": 0
+}
+```
+
+**Verification:**
+⚡ **Input Command:**
+```javascript
+db.employees.findOne({ name: "Robert" });
+```
+🖥️ **Terminal Output:**
+```json
+{
+  "_id": "EMP005",
+  "name": "Robert",
+  "department": "Engineering",
+  "experience": 5,
+  "skills": ["Java", "Docker", "MongoDB"],
+  "active": true,
+  "address": { "city": "Delhi", "country": "India" }
+}
+```
+
+#### Visual Execution Proof:
+* **Update Operations (Alice, Emma, Robert):**  
+  ![Task 3 Update Operations](screenshots/03a_update_operations.png)
+* **Idempotency Verification ($addToSet Second Execution):**  
+  ![Task 3 Idempotency Verification](screenshots/03b_idempotency_verification.png)
+
+
 
 

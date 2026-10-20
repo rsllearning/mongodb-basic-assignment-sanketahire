@@ -27,3 +27,19 @@ db.employees.find({ "address.city": "Pune" }, { _id: 0, name: 1, "address.city":
 db.employees.find({ skills: { $in: ["MongoDB", "Spring Boot"] } }).sort({ name: 1 });
 
 db.employees.find({}, { _id: 0, name: 1, experience: 1 }).sort({ experience: -1 }).limit(2);
+
+db.employees.updateOne({ name: "Alice" }, { $inc: { experience: 1 } });
+
+db.employees.findOne({ name: "Alice" });
+
+db.employees.updateOne({ name: "Emma" }, { $set: { active: true } });
+
+db.employees.findOne({ name: "Emma" });
+
+db.employees.updateOne({ name: "Robert" }, { $addToSet: { skills: "MongoDB" } });
+
+db.employees.findOne({ name: "Robert" });
+
+db.employees.updateOne({ name: "Robert" }, { $addToSet: { skills: "MongoDB" } });
+
+db.employees.findOne({ name: "Robert" });
